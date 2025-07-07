@@ -42,4 +42,25 @@ const loginUser = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, loginUser };
+const authMiddleware = async (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader?.startsWith("Bearer ")) {
+    return res.json({ message: "Not found token" });
+  }
+  const token = authHeader.split(" ")[1];
+
+  try {
+    const decoded = jwt.decode(token, secretKey);
+    console.log(decoded.userLogged._id);
+    const user = await User.findById(decoded.userLogged._id).select(
+      "-password"
+    );
+    res.json({
+      user,
+    });
+  } catch (error) {
+    res.json({ error });
+  }
+};
+
+module.exports = { registerUser, loginUser, authMiddleware };

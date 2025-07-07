@@ -12,7 +12,7 @@ app.use(express.urlencoded());
 app.use(cors());
 
 app.use("/habit", habitRoute);
-app.use("/user", userRoute);
+app.use("/auth", userRoute);
 
 mongoose.set("strictQuery", true);
 
