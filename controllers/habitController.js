@@ -9,7 +9,7 @@ const createHabit = async (req, res) => {
       frequency,
     });
     await habit.save();
-    res.json({
+    res.status(200).json({
       message: "Habit created!",
     });
   } catch (error) {
