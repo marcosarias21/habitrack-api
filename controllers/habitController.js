@@ -18,4 +18,20 @@ const createHabit = async (req, res) => {
   }
 };
 
-module.exports = { createHabit };
+const getHabit = async (req, res) => {
+  const { idUser, today } = req.query;
+
+  try {
+    const habit = await Habit.find({ user: idUser, daysOfWeek: today });
+    res.json({
+      habit,
+    });
+    console.log(habit);
+  } catch (error) {
+    res.json({
+      error,
+    });
+  }
+};
+
+module.exports = { createHabit, getHabit };
