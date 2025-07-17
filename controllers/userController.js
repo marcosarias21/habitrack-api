@@ -51,7 +51,6 @@ const authMiddleware = async (req, res) => {
 
   try {
     const decoded = jwt.decode(token, secretKey);
-    console.log(decoded.userLogged._id);
     const user = await User.findById(decoded.userLogged._id).select(
       "-password"
     );
