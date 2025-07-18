@@ -19,14 +19,22 @@ const createHabit = async (req, res) => {
 };
 
 const getHabit = async (req, res) => {
-  const { idUser, today } = req.query;
-
+  const { idUser, today, date } = req.query;
+  console.log(idUser, today, date);
   try {
-    const habit = await Habit.find({ user: idUser, daysOfWeek: today });
-    res.json({
-      habit,
+    const habits = await Habit.find({
+      user: idUser,
+      daysOfWeek: today,
+      $or: [
+        { datesDone: { $exists: false } },
+        { datesDone: { $eq: [] } },
+        { datesDone: { $nin: [date] } },
+      ],
     });
-    console.log(habit);
+    res.json({
+      habits,
+    });
+    console.log(habits);
   } catch (error) {
     res.json({
       error,
