@@ -20,7 +20,7 @@ const createHabit = async (req, res) => {
 
 const getHabit = async (req, res) => {
   const { idUser, today, date } = req.query;
-  console.log(idUser, today, date);
+  console.log(idUser);
   try {
     const habits = await Habit.find({
       user: idUser,
@@ -31,10 +31,10 @@ const getHabit = async (req, res) => {
         { datesDone: { $nin: [date] } },
       ],
     });
+    console.log(habits);
     res.json({
       habits,
     });
-    console.log(habits);
   } catch (error) {
     res.json({
       error,
@@ -42,4 +42,24 @@ const getHabit = async (req, res) => {
   }
 };
 
-module.exports = { createHabit, getHabit };
+const completeHabit = async (req, res) => {
+  const { date } = req.body;
+  const { id } = req.params;
+  console.log(id, date);
+
+  try {
+    const habitToComplete = await Habit.findByIdAndUpdate(id, {
+      datesDone: [date],
+    });
+    await habitToComplete.save();
+    res.json({
+      message: "Habit completed!",
+    });
+  } catch (error) {
+    res.json({
+      error,
+    });
+  }
+};
+
+module.exports = { createHabit, getHabit, completeHabit };
