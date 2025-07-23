@@ -21,18 +21,16 @@ const createHabit = async (req, res) => {
 const getHabit = async (req, res) => {
   const { idUser, today, date } = req.query;
   try {
-    const habits = await Habit.find({
+    const allHabitsToday = await Habit.find({
       user: idUser,
       daysOfWeek: today,
-      $or: [
-        { datesDone: { $exists: false } },
-        { datesDone: { $eq: [] } },
-        { datesDone: { $nin: [date] } },
-      ],
     });
-
+    const habitsNotDone = allHabitsToday.filter(
+      (h) => !h.datesDone.includes(date)
+    );
     res.json({
-      habits,
+      habitsNotDone,
+      allHabitsToday: allHabitsToday.length,
     });
   } catch (error) {
     res.json({
