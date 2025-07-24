@@ -25,11 +25,14 @@ const getHabit = async (req, res) => {
       user: idUser,
       daysOfWeek: today,
     });
+
     const habitsNotDone = allHabitsToday.filter(
       (h) => !h.datesDone.includes(date)
     );
+
     res.json({
       habitsNotDone,
+      habitsCompleted: allHabitsToday,
       allHabitsToday: allHabitsToday.length,
     });
   } catch (error) {
