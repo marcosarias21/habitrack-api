@@ -47,9 +47,13 @@ const completeHabit = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const habitToComplete = await Habit.findByIdAndUpdate(id, {
-      datesDone: [date],
-    });
+    const habitToComplete = await Habit.findByIdAndUpdate(
+      id,
+      {
+        $push: { datesDone: date },
+      },
+      { new: true }
+    );
 
     await habitToComplete.save();
 
@@ -63,4 +67,27 @@ const completeHabit = async (req, res) => {
   }
 };
 
-module.exports = { createHabit, getHabit, completeHabit };
+const editHabit = async (req, res) => {
+  const { id } = req.params;
+  const { name, days, frequency } = req.body;
+
+  try {
+    const habitEdit = await Habit.findByIdAndUpdate(id, {
+      name,
+      daysOfWeek: days,
+      frequency,
+    });
+
+    await habitEdit.save();
+
+    res.json({
+      message: "Habit edited successfully",
+    });
+  } catch (error) {
+    res.json({
+      error,
+    });
+  }
+};
+
+module.exports = { createHabit, getHabit, completeHabit, editHabit };
