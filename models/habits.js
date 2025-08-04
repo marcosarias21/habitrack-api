@@ -7,6 +7,7 @@ const HabitSchema = new mongoose.Schema(
     frequency: { type: String, default: "daily" },
     datesDone: [{ type: String }],
     daysOfWeek: [{ type: Number }],
+    area: { type: String },
   },
   { timestamps: true }
 );
