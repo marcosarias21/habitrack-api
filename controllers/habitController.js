@@ -20,12 +20,14 @@ const createHabit = async (req, res) => {
 };
 
 const getHabit = async (req, res) => {
-  const { idUser, today, date } = req.query;
+  const { idUser, today, date, filter } = req.query;
+
+  const query = { user: idUser, daysOfWeek: today };
+
+  if (filter) query.area = filter;
+
   try {
-    const allHabitsToday = await Habit.find({
-      user: idUser,
-      daysOfWeek: today,
-    });
+    const allHabitsToday = await Habit.find(query);
 
     const habitsNotDone = allHabitsToday.filter(
       (h) => !h.datesDone.includes(date)
