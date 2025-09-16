@@ -93,4 +93,25 @@ const editHabit = async (req, res) => {
   }
 };
 
-module.exports = { createHabit, getHabit, completeHabit, editHabit };
+const getAllHabits = async (req, res) => {
+  const { idUser } = req.params;
+  console.log(idUser);
+  try {
+    const allUserHabits = await Habit.find({ user: idUser });
+    res.json({
+      allUserHabits,
+    });
+  } catch (error) {
+    res.json({
+      error,
+    });
+  }
+};
+
+module.exports = {
+  createHabit,
+  getHabit,
+  completeHabit,
+  editHabit,
+  getAllHabits,
+};
